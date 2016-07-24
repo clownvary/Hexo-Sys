@@ -6,10 +6,10 @@ menu:
 
 # SubNav
 subnav:
-  github: "#"
-  weibo: "#"
-  rss: "#"
-  zhihu: "#"
+  github: "http://github.com/clownvary"
+  #weibo: "sdsd"
+  #rss: "#"
+  zhihu: "http://www.zhihu.com/people/wang-yan-27-18"
   #douban: "#"
   #mail: "#"
   #facebook: "#"
@@ -35,12 +35,12 @@ google_analytics: ''
 favicon: /favicon.png
 
 #你的头像url
-avatar: 
+avatar:  "http://avatars1.githubusercontent.com/u/6481427?v=3&s=460"
 #是否开启分享
 share: true
 #是否开启多说评论，填写你在多说申请的项目名称 duoshuo: duoshuo-key
 #若使用disqus，请在博客config文件中填写disqus_shortname，并关闭多说评论
-duoshuo: true
+duoshuo: clownvary
 #是否开启云标签
 tagcloud: true
 
@@ -60,4 +60,4 @@ friends:
 #不开启——
 #aboutme: false
 #开启——
-aboutme: 我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…
+aboutme: 一个对前端又爱又恨的码农
