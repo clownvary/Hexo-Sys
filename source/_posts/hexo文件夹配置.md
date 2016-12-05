@@ -19,4 +19,4 @@ Hexo 在写文章时，如果需要引用资源文件比如图片，可以直接
 - 在＿config.yml中修改配置项`post_asset_folder: true` 开启功能
 - 之后每次hexo new ...文章时会同时生成一个同名的文件夹，把该文章的图片放进去
 - 访问格式{% asset_img xxx.jpg This is an example image %},不能直接用markdown格式引入
-- 我来自内部目录{% asset_img down.png this is img from folder%}
+- 我来自内部目录{% asset_img down.png this is img from folder %}
