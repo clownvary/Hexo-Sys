@@ -1,4 +1,4 @@
-title: vue易错笔记.md
+title: vue易错笔记
 date: 2016-11-18 00:23:01
 tags: [前端, 学习, html, js, css, vue]
 ---
