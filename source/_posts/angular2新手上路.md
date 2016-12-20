@@ -7,6 +7,8 @@ tags: [angular2, 新手注意, 学习]
 - webpack　打包出错can not find name [看这个](http://stackoverflow.com/questions/33332394/angular-2-typescript-cant-find-names)
 - webpack-dev-server　如果以这种方式运行，不会生成物理文件，只会在内存中生成，配合HＭR开发体验较好
 - webstorm中不要开启typescript的`use typescript service(experimental)`功能,会语法提示错误
+- webpack2和1的配置有很大不同,注意看版本号,不能使用简写了所有的loader必须添加"xxx-loader"
+- webpack2中 ExtractTextPlugin必须使用loader,不能用use,否则出错`loader: ExtractTextPlugin.extract({fallbackLoader: "style-loader", loader: "css-loader"})`
 - tsconfig设置
 
 
