@@ -18,10 +18,35 @@ tags: [angular2, 新手注意, 学习]
 	
 ### 概念
 - ngModule内的***imports***和ts文件头的***import***不同，前者是angular内部的如何组织angular特性(即需要angular内的什么特性就声明什么,比如每个都需要的BrowserModule,RouteModule等,只能是ngModule)，后者是导入文件模块然后可以外部访问
-- module中的provider提供的是应用级的服务，这里生声明的在整个应用都能访问到
+- module中的provider提供的是应用级的服务，这里声明的在整个应用都能访问到
 - 依赖注入有两种方式，一种全局注入，一种组件内注入,全局的都用到的在ｍodule内的providers声明，组件内的在组件内的providers声明
-- HTML attribute value指定了初始值；DOM value property 是当前值,两个不同,angular中主要是用到property,不是attribute,
+***两种注入方式都必须在头部声明import　xxx***
+　有４种提供商注册方式    
+	```
+	　providers：［Logger］//相当于注册的key(id)和提供者一样
+        providers:[{provide:Logger,useClass:UserLogger}]//key是Logger,但注入的是一个名为UserLogger的类，
+        providers:[{provide:Logger,useFactory:FacLogger}]//动态产生最终的注入者
+        providers:[{provide:Logger,useValue:'3'}]//注入值就是３
 
+	```
+- HTML attribute value指定了初始值；DOM value property 是当前值,两个不同,angular中主要是用到property,不是attribute,
+- 安全导航操作符 ( ?. ) 和空属性路径,用来避免null或者undefine时程序崩溃,当不确定对象是否有此属性时使用
+
+   	`The null hero's name is {{nullHero?.firstName}}`
+   相当于
+   	`<span *ngIf='nullHero'>The null hero's name is</span>`
+- 组件嵌套,如果A组件在它内部使用了组件B,那么不用在A的头部import 组件B,只需要在module启动模块文件头import 组件B,同时声明declaration就行,这样全局都能访问
+- 用户输入,模板引用变量
+	```
+	//以#开头直接在模板中使用变量
+	@Component({
+  	selector: 'loop-back',
+  	template: `
+    	<input #box (keyup)="0">
+    	<p>{{box.value}}</p>
+  	`
+	})
+	```
 - 数据绑定可单向可双向,单向由模型=>视图`属性绑定<div [name]='model.name'>`,`插值绑定<div name='{{model.name}}''>`,两者一样,,由视图=>模型(其实就是事件响应)`<div (click)='model.clickHandle'>`使用括号,双向绑定的话使用`[(xxx)]`
 - `属性绑定<div [name]='model.name'>`,`插值绑定<div name='{{model.name}}''>`,两者都绑定的是属性(property)不是attribute,要设置attribute,如下
 `<td [attr.colspan]="1 + 1">`,使用`attr.`语法
@@ -62,42 +87,13 @@ tags: [angular2, 新手注意, 学习]
 
 	```
 - ***两种注入方式都必须在头部声明import　xxx***
-=======
-### 概念
-- ngModule内的***imports***和ts文件头的***import***不同，前者是angular内部的如何组织angular特性，后者是导入文件模块然后可以外部访问
-- module中的provider提供的是应用级的服务，这里生声明的在整个应用都能访问到
-- 依赖注入有两种方式，一种全局注入，一种组件内注入,全局的都用到的在ｍodule内的providers声明，组件内的在组件内的providers声明
-***两种注入方式都必须在头部声明import　xxx***
-　有４种提供商注册方式    
-	```
-	　providers：［Logger］//相当于注册的key(id)和提供者一样
-        providers:[{provide:Logger,useClass:UserLogger}]//key是Logger,但注入的是一个名为UserLogger的类，
-        providers:[{provide:Logger,useFactory:FacLogger}]//动态产生最终的注入者
-        providers:[{provide:Logger,useValue:'3'}]//注入值就是３
 
-	```
-- 安全导航操作符 ( ?. ) 和空属性路径,用来避免null或者undefine时程序崩溃,当不确定对象是否有此属性时使用
-
-   	`The null hero's name is {{nullHero?.firstName}}`
-   相当于
-   	`<span *ngIf='nullHero'>The null hero's name is</span>`
-- 组件嵌套,如果A组件在它内部使用了组件B,那么不用在A的头部import 组件B,只需要在module启动模块文件头import 组件B,同时声明declaration就行,这样全局都能访问
-- 用户输入,模板引用变量
-	```
-	//以#开头直接在模板中使用变量
-	@Component({
-  	selector: 'loop-back',
-  	template: `
-    	<input #box (keyup)="0">
-    	<p>{{box.value}}</p>
-  	`
-	})
-	```
 ### 结构
 -   每个项目必须有一个appModule,也就是根模块，用来告诉angular怎么组织各种模块和指令等
 -   最好有一个main(boot)文件用来告诉做启动入口，之后相应的模块加载器system(webpack)会按照自己的方式导入到首页index，然后启动
 -   `@Component`装饰器下面紧跟的导出类会是一个组件,和名称无关,相当于这个装饰器修饰的是紧跟的类
 -    服务导入后不要直接使用而是放在constructor中作为私有变量服务使用,另外如果是获取数据的话,在ngOnInit()中再调用,不要在构造函数中使用
+
 ### 编码规范
 - 惯用后缀来描述,*.service,*.pipe等,测试使用spec后缀
 - 组件自定义前缀,驼峰命名
