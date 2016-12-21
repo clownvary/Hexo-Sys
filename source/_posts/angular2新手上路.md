@@ -9,6 +9,7 @@ tags: [angular2, 新手注意, 学习]
 - webstorm中不要开启typescript的`use typescript service(experimental)`功能,会语法提示错误
 - webpack2和1的配置有很大不同,注意看版本号,不能使用简写了所有的loader必须添加"xxx-loader"
 - webpack2中 ExtractTextPlugin必须使用loader,不能用use,否则出错`loader: ExtractTextPlugin.extract({fallbackLoader: "style-loader", loader: "css-loader"})`
+- webpack p配置中开发时 devtool: 'inline-eval-source-map',其他的模式会有调试bug
 - tsconfig设置
 
 
@@ -18,10 +19,35 @@ tags: [angular2, 新手注意, 学习]
 	
 ### 概念
 - ngModule内的***imports***和ts文件头的***import***不同，前者是angular内部的如何组织angular特性(即需要angular内的什么特性就声明什么,比如每个都需要的BrowserModule,RouteModule等,只能是ngModule)，后者是导入文件模块然后可以外部访问
-- module中的provider提供的是应用级的服务，这里生声明的在整个应用都能访问到
+- module中的provider提供的是应用级的服务，这里声明的在整个应用都能访问到
 - 依赖注入有两种方式，一种全局注入，一种组件内注入,全局的都用到的在ｍodule内的providers声明，组件内的在组件内的providers声明
-- HTML attribute value指定了初始值；DOM value property 是当前值,两个不同,angular中主要是用到property,不是attribute,
+***两种注入方式都必须在头部声明import　xxx***
+　有４种提供商注册方式    
+	```
+	  providers：［Logger］//相当于注册的key(id)和提供者一样
+        providers:[{provide:Logger,useClass:UserLogger}]//key是Logger,但注入的是一个名为UserLogger的类，
+        providers:[{provide:Logger,useFactory:FacLogger}]//动态产生最终的注入者
+        providers:[{provide:Logger,useValue:'3'}]//注入值就是３
 
+	```
+- HTML attribute value指定了初始值；DOM value property 是当前值,两个不同,angular中主要是用到property,不是attribute,
+- 安全导航操作符 ( ?. ) 和空属性路径,用来避免null或者undefine时程序崩溃,当不确定对象是否有此属性时使用
+
+   	`The null hero's name is {{nullHero?.firstName}}`
+   相当于
+   	`<span *ngIf='nullHero'>The null hero's name is</span>`
+- 组件嵌套,如果A组件在它内部使用了组件B,那么不用在A的头部import 组件B,只需要在module启动模块文件头import 组件B,同时声明declaration就行,这样全局都能访问
+- 用户输入,模板引用变量
+	```
+	//以#开头直接在模板中使用变量
+	@Component({
+  	selector: 'loop-back',
+  	template: `
+    	<input #box (keyup)="0">
+    	<p>{{box.value}}</p>
+  	`
+	})
+	```
 - 数据绑定可单向可双向,单向由模型=>视图`属性绑定<div [name]='model.name'>`,`插值绑定<div name='{{model.name}}''>`,两者一样,,由视图=>模型(其实就是事件响应)`<div (click)='model.clickHandle'>`使用括号,双向绑定的话使用`[(xxx)]`
 - `属性绑定<div [name]='model.name'>`,`插值绑定<div name='{{model.name}}''>`,两者都绑定的是属性(property)不是attribute,要设置attribute,如下
 `<td [attr.colspan]="1 + 1">`,使用`attr.`语法
@@ -62,42 +88,56 @@ tags: [angular2, 新手注意, 学习]
 
 	```
 - ***两种注入方式都必须在头部声明import　xxx***
-=======
-### 概念
-- ngModule内的***imports***和ts文件头的***import***不同，前者是angular内部的如何组织angular特性，后者是导入文件模块然后可以外部访问
-- module中的provider提供的是应用级的服务，这里生声明的在整个应用都能访问到
-- 依赖注入有两种方式，一种全局注入，一种组件内注入,全局的都用到的在ｍodule内的providers声明，组件内的在组件内的providers声明
-***两种注入方式都必须在头部声明import　xxx***
-　有４种提供商注册方式    
-	```
-	　providers：［Logger］//相当于注册的key(id)和提供者一样
-        providers:[{provide:Logger,useClass:UserLogger}]//key是Logger,但注入的是一个名为UserLogger的类，
-        providers:[{provide:Logger,useFactory:FacLogger}]//动态产生最终的注入者
-        providers:[{provide:Logger,useValue:'3'}]//注入值就是３
 
+### 路由
+- path中不能用斜线/开头，,路径中的参数是params,data是自定义参数，匹配策略是先匹配具体的路由，后匹配通用的路由
 	```
-- 安全导航操作符 ( ?. ) 和空属性路径,用来避免null或者undefine时程序崩溃,当不确定对象是否有此属性时使用
+	 { path: 'hero/:id', 
+	 component: HeroDetailComponent , 
+	 data: {
+           title: 'Heroes List'
+        }
+      } 
+      ```
+- 一个模板中只能有一个***未命名***的<router-outlet>。 但路由器可以支持多个***命名***的插座（outlet）
+- 特性路由模块，和应用级路由模块区别是前者的RouteModule.forChild(),后者是forRoot()
+- ActivatedRoute包含你需要从当前路由组件中获得的全部信息，包括路径参数自定义data数据等
+- 必要参数和可选参数，从列表到详情需要id这是必要参数，从详情到列表，希望最好返回时选中之前的某一个，也需要个id,这个是可选参数（一般是可选的，**复杂**的多变量的），可选参数当父组件没有定义路由时，使用Matrix URL 写法，例如`http://localhost:3005/heroes;id=12;foo=foo`
 
-   	`The null hero's name is {{nullHero?.firstName}}`
-   相当于
-   	`<span *ngIf='nullHero'>The null hero's name is</span>`
-- 组件嵌套,如果A组件在它内部使用了组件B,那么不用在A的头部import 组件B,只需要在module启动模块文件头import 组件B,同时声明declaration就行,这样全局都能访问
-- 用户输入,模板引用变量
-	```
-	//以#开头直接在模板中使用变量
-	@Component({
-  	selector: 'loop-back',
-  	template: `
-    	<input #box (keyup)="0">
-    	<p>{{box.value}}</p>
-  	`
-	})
-	```
+- 可选参数可必要参数区别
+```
+// 必要参数
+ {path: 'detail/:id/:name', component: HeroDetailComponent }//定义路由
+ this.router.navigate(['/detail', this.selectedHero.id, 'name']);//跳转，是用路由参数数组，不是对象和angular1不同
+ //最终url  
+ http://localhost:3005/detail/15/te
+// 获取
+ this.route.params
+      .switchMap((params: Params) => this.heroService.getHero(+params['id']))// params [参考这个](https://angular.cn/docs/ts/latest/guide/router.html#!#activated-route)
+
+
+ // 可选参数
+ //和定义的路由无关
+this.router.navigate(['/heroes', { id: heroId, foo: 'foo' }]);//跳转，使用对象
+ //最终url  
+localhost:3000/heroes;id=15;foo=foo
+//获取
+    this.heroes = this.route.params
+      .switchMap((params: Params) => {
+        this.selectedId = +params['id'];//通过params获取
+        return this.service.getHeroes();
+      });
+```
+
+
+
 ### 结构
 -   每个项目必须有一个appModule,也就是根模块，用来告诉angular怎么组织各种模块和指令等
 -   最好有一个main(boot)文件用来告诉做启动入口，之后相应的模块加载器system(webpack)会按照自己的方式导入到首页index，然后启动
 -   `@Component`装饰器下面紧跟的导出类会是一个组件,和名称无关,相当于这个装饰器修饰的是紧跟的类
 -    服务导入后不要直接使用而是放在constructor中作为私有变量服务使用,另外如果是获取数据的话,在ngOnInit()中再调用,不要在构造函数中使用
+
+
 ### 编码规范
 - 惯用后缀来描述,*.service,*.pipe等,测试使用spec后缀
 - 组件自定义前缀,驼峰命名
