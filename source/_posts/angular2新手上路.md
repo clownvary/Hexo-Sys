@@ -7,6 +7,7 @@ tags: [angular2, 新手注意, 学习]
 - webpack　打包出错can not find name [看这个](http://stackoverflow.com/questions/33332394/angular-2-typescript-cant-find-names)
 - webpack-dev-server　如果以这种方式运行，不会生成物理文件，只会在内存中生成，配合HＭR开发体验较好
 - webstorm中不要开启typescript的`use typescript service(experimental)`功能,会语法提示错误
+- webstorm 中导入component时，`alt+enter`可以自动导入当前文件中用到的组件
 - webpack2和1的配置有很大不同,注意看版本号,不能使用简写了所有的loader必须添加"xxx-loader"
 - webpack2中 ExtractTextPlugin必须使用loader,不能用use,否则出错`loader: ExtractTextPlugin.extract({fallbackLoader: "style-loader", loader: "css-loader"})`
 - tsconfig设置
@@ -93,6 +94,7 @@ tags: [angular2, 新手注意, 学习]
 -   最好有一个main(boot)文件用来告诉做启动入口，之后相应的模块加载器system(webpack)会按照自己的方式导入到首页index，然后启动
 -   `@Component`装饰器下面紧跟的导出类会是一个组件,和名称无关,相当于这个装饰器修饰的是紧跟的类
 -    服务导入后不要直接使用而是放在constructor中作为私有变量服务使用,另外如果是获取数据的话,在ngOnInit()中再调用,不要在构造函数中使用
+-    建议在中等以上的项目中，每个子功能成单独的模块，即有自己的路由和module,最后同一在app.module中加载，注意使用此种结构别忘了在app.module中还要加载`RouteModule.forRoot()`,特性模块拥有自己的outlet
 
 ### 编码规范
 - 惯用后缀来描述,*.service,*.pipe等,测试使用spec后缀
