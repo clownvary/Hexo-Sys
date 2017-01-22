@@ -7,6 +7,7 @@ tags: [angular2, 新手注意, 学习]
 - webpack　打包出错can not find name [看这个](http://stackoverflow.com/questions/33332394/angular-2-typescript-cant-find-names)
 - webpack-dev-server　如果以这种方式运行，不会生成物理文件，只会在内存中生成，配合HＭR开发体验较好
 - webstorm中不要开启typescript的`use typescript service(experimental)`功能,会语法提示错误
+- webstorm 中导入component时，`alt+enter`可以自动导入当前文件中用到的组件
 - webpack2和1的配置有很大不同,注意看版本号,不能使用简写了所有的loader必须添加"xxx-loader"
 - webpack2中 ExtractTextPlugin必须使用loader,不能用use,否则出错`loader: ExtractTextPlugin.extract({fallbackLoader: "style-loader", loader: "css-loader"})`
 - webpack p配置中开发时 devtool: 'inline-eval-source-map',其他的模式会有调试bug
@@ -28,7 +29,6 @@ tags: [angular2, 新手注意, 学习]
         providers:[{provide:Logger,useClass:UserLogger}]//key是Logger,但注入的是一个名为UserLogger的类，
         providers:[{provide:Logger,useFactory:FacLogger}]//动态产生最终的注入者
         providers:[{provide:Logger,useValue:'3'}]//注入值就是３
-
 	```
 - HTML attribute value指定了初始值；DOM value property 是当前值,两个不同,angular中主要是用到property,不是attribute,
 - 安全导航操作符 ( ?. ) 和空属性路径,用来避免null或者undefine时程序崩溃,当不确定对象是否有此属性时使用
@@ -88,7 +88,6 @@ tags: [angular2, 新手注意, 学习]
 
 	```
 - ***两种注入方式都必须在头部声明import　xxx***
-
 ### 路由
 - path中不能用斜线/开头，,路径中的参数是params,data是自定义参数，匹配策略是先匹配具体的路由，后匹配通用的路由
 	```
@@ -130,13 +129,12 @@ localhost:3000/heroes;id=15;foo=foo
 ```
 
 
-
 ### 结构
 -   每个项目必须有一个appModule,也就是根模块，用来告诉angular怎么组织各种模块和指令等
 -   最好有一个main(boot)文件用来告诉做启动入口，之后相应的模块加载器system(webpack)会按照自己的方式导入到首页index，然后启动
 -   `@Component`装饰器下面紧跟的导出类会是一个组件,和名称无关,相当于这个装饰器修饰的是紧跟的类
 -    服务导入后不要直接使用而是放在constructor中作为私有变量服务使用,另外如果是获取数据的话,在ngOnInit()中再调用,不要在构造函数中使用
-
+-    建议在中等以上的项目中，每个子功能成单独的模块，即有自己的路由和module,最后同一在app.module中加载，注意使用此种结构别忘了在app.module中还要加载`RouteModule.forRoot()`,特性模块拥有自己的outlet
 
 ### 编码规范
 - 惯用后缀来描述,*.service,*.pipe等,测试使用spec后缀
